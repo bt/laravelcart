@@ -66,7 +66,7 @@ class Cart
 
     public function removeItem($item)
     {
-        $this->checkItem($item);
+        $this->checkId($item);
 
         $this->fireEvent('cart.item.removed', [$item]);
 
@@ -90,8 +90,6 @@ class Cart
 
     public function mergeItems($items)
     {
-        $items = $this->toArray($items);
-
         foreach($items as $item){
             $this->checkItem($item);
 
@@ -101,8 +99,10 @@ class Cart
             if($itemInSession !== []){
                 $item['quantity'] += $itemInSession['quantity'];
                 $this->session->update([$item]);
+                $this->fireEvent('cart.item.updated', [$item]);
             }
             else{
+                $this->fireEvent('cart.item.added', [$item]);
                 $this->session->add($item);
             }
         }
@@ -129,14 +129,21 @@ class Cart
         return count($items);
     }
 
+    public function checkItem($item){
+        $this->checkId($item);
+        $this->checkQuantity($item);
+    }
 
-    protected function checkItem($item){
+    protected function checkId($item){
         if(!array_key_exists('id', $item)){
             throw new InvalidArgumentException('item must contain the key: id');
         }
+    }
 
+    protected function checkQuantity($item){
         if(!array_key_exists('quantity', $item)){
             throw new InvalidArgumentException('item must contain the key: quantity');
         }
     }
+
 }
