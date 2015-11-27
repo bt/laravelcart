@@ -1,0 +1,16 @@
+{
+	"name": "mnt/cart",
+	"require": {
+		"php": ">=5.4.0",
+        "illuminate/support": "~5.0",
+		"cartalyst/support": "^1.1"
+	},
+	"require-dev": {
+		"illuminate/session": "^5.1",
+	  	"phpunit/phpunit": "~4.0",
+		"mockery/mockery": "^0.9.4"
+    },
+	"autoload": {
+		"psr-4": {"Mnt\\Cart\\": "src/"}
+	}
+}
